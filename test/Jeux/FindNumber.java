@@ -3,6 +3,7 @@ package Jeux;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author mehdi
@@ -25,6 +26,7 @@ public class FindNumber {
 	}
 	
 	private void play() {
+		Date start = new Date();
 		for(int i=1; i<9; i++) {
 	    	System.out.println("Essai " +i+" : ");
     		if(!this.manageCodeUser(this.sc.next())) {
@@ -35,9 +37,8 @@ public class FindNumber {
 		    	System.out.println("Erreur - Saisissez un nombre a 4 chiffres");
 		    	continue;
 		    }
-    		
 		    if(this.judgeResult()) {
-		    	System.out.println("Code trouvé, Félicitation");
+		    	System.out.println("Code trouvé en "+i+" essai(s)/"+this.getTimeSecond(start, new Date())+" seconde(s), Félicitation");
 		    	break;
 		    }
 		}
@@ -112,5 +113,9 @@ public class FindNumber {
 			this.play();
 			this.replay();
 		}
+	}
+	
+	private long getTimeSecond(Date start, Date end) {
+		return (end.getTime() / 1000) - (start.getTime() / 1000);
 	}
 }
