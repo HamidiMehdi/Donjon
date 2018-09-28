@@ -12,6 +12,8 @@ public class FindNumber {
 	
 	private ArrayList<Integer> code_secret = new ArrayList<Integer>();
 	private ArrayList<Integer> code_user   = new ArrayList<Integer>();
+	private Scanner sc = new Scanner(System.in);
+
 
 	/**
 	 * 
@@ -20,13 +22,13 @@ public class FindNumber {
 		this.generateCode();
 		System.out.println(this.getCodeSecret());
 		this.play();
+		this.replay();
 	}
 	
 	private void play() {
-		Scanner sc = new Scanner(System.in);
 		for(int i=1; i<9; i++) {
 	    	System.out.println("Essai " +i+" : ");
-    		if(!this.manageCodeUser(sc.next())) {
+    		if(!this.manageCodeUser(this.sc.next())) {
     			System.out.println("Erreur - Saisissez un nombre réel");
 		    	continue;
     		}
@@ -99,5 +101,16 @@ public class FindNumber {
 			str_code += String.valueOf(n);
 		}
 		return "[" + str_code + "]";
+	}
+	
+	private void replay() {
+		System.out.println("Voulez vous rejouer (y/n)");
+		if(sc.next().equals("y")) {
+			this.code_secret.clear();
+			this.generateCode();
+			System.out.println(this.getCodeSecret());
+			this.play();
+			this.replay();
+		}
 	}
 }
