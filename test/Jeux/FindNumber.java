@@ -14,7 +14,6 @@ public class FindNumber {
 	private ArrayList<Integer> code_user   = new ArrayList<Integer>();
 	private Scanner sc = new Scanner(System.in);
 
-
 	/**
 	 * 
 	 */
@@ -106,6 +105,7 @@ public class FindNumber {
 	private void replay() {
 		System.out.println("Voulez vous rejouer (y/n)");
 		if(sc.next().equals("y")) {
+			System.out.println("---------------------");
 			this.code_secret.clear();
 			this.generateCode();
 			System.out.println(this.getCodeSecret());
