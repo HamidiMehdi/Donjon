@@ -2,6 +2,9 @@ package Jeux;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,6 +17,7 @@ public class FindNumber {
 	private ArrayList<Integer> code_secret = new ArrayList<Integer>();
 	private ArrayList<Integer> code_user   = new ArrayList<Integer>();
 	private Scanner sc = new Scanner(System.in);
+	private File file = new File("C:/Users/mehdi/eclipse-workspace/fileData.txt");
 
 	/**
 	 * 
@@ -26,22 +30,46 @@ public class FindNumber {
 	}
 	
 	private void play() {
+		this.fileExist();
+		FileWriter fw;
 		Date start = new Date();
-		for(int i=1; i<9; i++) {
-	    	System.out.println("Essai " +i+" : ");
-    		if(!this.manageCodeUser(this.sc.next())) {
-    			System.out.println("Erreur - Saisissez un nombre réel");
-		    	continue;
-    		}
-    		if(this.code_user.size() != 4) {
-		    	System.out.println("Erreur - Saisissez un nombre a 4 chiffres");
-		    	continue;
-		    }
-		    if(this.judgeResult()) {
-		    	System.out.println("Code trouvé en "+i+" essai(s)/"+this.getTimeSecond(start, new Date())+" seconde(s), Félicitation");
-		    	break;
-		    }
+		Date end;
+		Boolean succes = false;
+		try {
+			fw = new FileWriter(this.file, true);
+			fw.write("\n");
+			fw.write("Code secret ===> " + this.getCodeSecret() + "\n");
+			for(int i=1; i<9; i++) {
+		    	System.out.println("Essai " +i+" : ");
+		    	String code_user = this.sc.next();
+		    	fw.write("Essai "+i+ " ===> " + code_user + "\n");
+	    		if(!this.manageCodeUser(code_user)) {
+	    			System.out.println("Erreur - Saisissez un nombre réel");
+			    	continue;
+	    		}
+	    		if(this.code_user.size() != 4) {
+			    	System.out.println("Erreur - Saisissez un nombre a 4 chiffres");
+			    	continue;
+			    }
+			    if(this.judgeResult()) {
+			    	succes = true;
+			    	end = new Date();
+			    	System.out.println("Code trouvé en "+i+" essai(s)/"+this.getTimeSecond(start, end)+" seconde(s), Félicitation");
+			    	fw.write("Jeu reussi en "+i+" essai(s)/"+this.getTimeSecond(start, end)+" seconde(s)\n");
+			    	break;
+			    }
+			}
+			if(!succes) {
+		    	end = new Date();
+		    	fw.write("Jeu non reussi en 8 essai(s)/"+this.getTimeSecond(start, end)+" seconde(s)\n");
+			}
+			fw.write("--------------------------------------------");
+	        fw.close() ;
+		} catch (IOException e) {
+			System.out.println("Impossible d'écrire dans le fichier");
+			e.printStackTrace();
 		}
+
 	}
 	
 	private boolean judgeResult() {
@@ -117,5 +145,15 @@ public class FindNumber {
 	
 	private long getTimeSecond(Date start, Date end) {
 		return (end.getTime() / 1000) - (start.getTime() / 1000);
+	}
+	
+	private boolean fileExist() {
+		try {
+		    this.file.createNewFile();
+		    return true;
+	    } catch (IOException e) {
+	    	System.out.println("Erreur creation du ficher ==> " + e.getMessage());
+		    return false;
+		}
 	}
 }
