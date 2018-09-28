@@ -26,53 +26,63 @@ public class FindNumber {
 		Scanner sc = new Scanner(System.in);
 		for(int i=1; i<9; i++) {
 	    	System.out.println("Essai " +i+" : ");
-    		if(this.manageCodeUser(sc.next()) == 500) {
+    		if(!this.manageCodeUser(sc.next())) {
     			System.out.println("Erreur - Saisissez un nombre réel");
 		    	continue;
     		}
-    		if( this.code_user.size() != 4 ) {
+    		if(this.code_user.size() != 4) {
 		    	System.out.println("Erreur - Saisissez un nombre a 4 chiffres");
 		    	continue;
 		    }
     		
-		    if(this.judgeResult() == 200) {
+		    if(this.judgeResult()) {
 		    	System.out.println("Code trouvé, Félicitation");
 		    	break;
 		    }
 		}
 	}
 	
-	private int judgeResult() {
-		int finish = 200 ;
+	private boolean judgeResult() {
+		boolean finish = true ;
 		for(int i = 0; i<this.code_user.size(); i++) {
 			if(this.code_user.get(i) == this.code_secret.get(i)) {
 				System.out.print("1");
 			}
 			else {
-				// Si il existe autre part, et qu'a cette meme place il a pas été prit
-				//  et l'autre est pas bon je met "." + sauvegarde
-				//
-				// Si il existe pas autre part, "x"
-				//
-				finish = 500;
-				System.out.print("x");
+				if(this.verifIfExist(this.code_user.get(i))) {
+					System.out.print(".");
+				}
+				else {
+					System.out.print("x");
+				}
+				finish = false;
 			}
 		}
 		System.out.println(" ");
 		return finish;
 	}
 	
-	private int manageCodeUser(String code_user) {
+	private boolean verifIfExist(int num) {
+		boolean exist = false;
+		for(int i = 0; i<this.code_secret.size(); i++) {
+			if( this.code_secret.get(i) == num &&  this.code_secret.get(i) != this.code_user.get(i) ) {
+				exist = true;
+			}
+		}
+		return  exist;
+	}
+	
+	private boolean manageCodeUser(String code_user) {
 		this.code_user.clear();
 		String tab[] = code_user.split("");
 		try{
 			for(int i = 0; i < tab.length; i++) {
 				this.code_user.add( Integer.parseInt(tab[i]) );
 			}
-			return 200;
+			return true;
 		}
 		catch (NumberFormatException e){
-		      return 500;
+		      return false;
 		}
 	}
 	
