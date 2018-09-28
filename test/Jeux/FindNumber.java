@@ -52,7 +52,7 @@ public class FindNumber {
 				// Si il existe autre part, et qu'a cette meme place il a pas été prit
 				//  et l'autre est pas bon je met "." + sauvegarde
 				//
-				// Si il existe pas autre part, "x" gg
+				// Si il existe pas autre part, "x"
 				//
 				finish = 500;
 				System.out.print("x");
